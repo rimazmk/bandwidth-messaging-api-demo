@@ -30,7 +30,7 @@ let db = new sqlite3.Database('users.db', (err) => {
 });
 
 // cron job
-cron.schedule("* * * * *", () => {
+cron.schedule("0 8 * * *", () => {
     console.log('running a job every minute');
     // Get all phone numbers then call getCities
     query = `
