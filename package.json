@@ -1,0 +1,23 @@
+{
+  "name": "demo-api-node",
+  "version": "1.0.0",
+  "description": "Demo of Bandwidth API and Rimaz's skills",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "nodemon index.js"
+  },
+  "author": "Rimaz Khan",
+  "license": "ISC",
+  "dependencies": {
+    "@bandwidth/messaging": "^2.0.0",
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "node-cron": "^2.0.3",
+    "nodemon": "^2.0.4",
+    "request": "^2.88.2",
+    "sqlite3": "^4.2.0"
+  }
+}
