@@ -73,7 +73,7 @@ const sendMessage = async (num, message) => {
 
     let config = {
         auth: {
-            username: "keystone-okta-api-demo",
+            username: process.env.BANDWIDTH_USER,
             password: process.env.BANDWIDTH_PASSWORD
         },
         headers: {
