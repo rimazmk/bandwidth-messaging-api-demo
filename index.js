@@ -91,7 +91,10 @@ const sendMessage = async (num, message) => {
     };
 
     try {
+        // get token for authorization
         const token = await axios.post('https://id.bandwidth.com/api/v1/oauth2/token', body, config);
+
+        // send message
         const response = await axios.post(process.env.MESSAGING_URL, msgBody, { headers: {
             Authorization: `Bearer ${token.data.access_token}`
         }})
