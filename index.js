@@ -6,19 +6,14 @@ const axios = require('axios');
 const cron = require('node-cron');
 require('dotenv').config();
 const sqlite3 = require('sqlite3');
+const qs = require('querystring');
 const PORT = 4000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const BandwidthMessaging = require('@bandwidth/messaging');
-BandwidthMessaging.Configuration.basicAuthUserName = process.env.MESSAGING_API_TOKEN;
-BandwidthMessaging.Configuration.basicAuthPassword = process.env.MESSAGING_API_SECRET;
-const messagingController = BandwidthMessaging.APIController;
-
 const weatherKey = process.env.WEATHER_API_KEY;
 let url = 'https://api.openweathermap.org/data/2.5/weather';
-
 
 
 /// open database in memory
@@ -30,9 +25,9 @@ let db = new sqlite3.Database('users.db', (err) => {
 });
 
 // cron job
-cron.schedule("0 8 * * *", () => {
+cron.schedule("* * * * *", () => {
     console.log('running a job every minute');
-    // Get all phone numbers then call getCities
+    // Get all phone numbers then call getWeather
     query = `
         SELECT users.Phone, City FROM users 
         INNER JOIN locations on users.Phone=locations.Phone
@@ -66,7 +61,6 @@ app.post('/register', (req, res) => {
 
 
 app.post('/messages', (req, res) => {
-    console.log(req.body);
     res.send('message recieved');
 })
 
@@ -77,16 +71,31 @@ app.listen(PORT, () => {
 // Use Bandwidth API to send a message
 const sendMessage = async (num, message) => {
 
-    let body = new BandwidthMessaging.MessageRequest({
+    let config = {
+        auth: {
+            username: "keystone-okta-api-demo",
+            password: process.env.BANDWIDTH_PASSWORD
+        },
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    };
+
+    //Need to use stringify for urlencoded
+    let body = qs.stringify({ "grant_type": "client_credentials" });
+    let msgBody = {
         "applicationId": "d22c04d9-5ff4-4e1e-902f-d3364fd4d61e" ,
         "to": num,
         "from": "+19194802826",
         "text": message
-    });
+    };
 
     try {
-        const result = await messagingController.createMessage("u-axcwcuurfwxes54fxhgkytq", body);
-        console.log(result);
+        const token = await axios.post('https://id.bandwidth.com/api/v1/oauth2/token', body, config);
+        const response = await axios.post(process.env.MESSAGING_URL, msgBody, { headers: {
+            Authorization: `Bearer ${token.data.access_token}`
+        }})
+        console.log(response);
     }
     catch (e) {
         console.log(e);
