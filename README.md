@@ -15,9 +15,11 @@ sqlite3 users.db
 
 Configure .env:
 ```
-echo "WEATHER_API_KEY=your_key" >> .env
-echo "MESSAGING_API_TOKEN=your_key" >> .env
-echo "MESSAGING_API_SECRET=your_key" >> .env
+echo "BANDWIDTH_PASSWORD=your_password" >> .env
+echo "BANDWIDTH_USER=your_user" >> .env
+echo "WEATHER_API_KEY=your_openweather_apikey" >> .env
+echo "FROM_PHONE=your_application_phone" >> .env
+echo "applicationId=your_appId" >> .env
 ```
 
 run:

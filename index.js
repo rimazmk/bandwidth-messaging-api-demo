@@ -84,9 +84,9 @@ const sendMessage = async (num, message) => {
     //Need to use stringify for urlencoded
     let body = qs.stringify({ "grant_type": "client_credentials" });
     let msgBody = {
-        "applicationId": "d22c04d9-5ff4-4e1e-902f-d3364fd4d61e" ,
+        "applicationId": process.env.applicationId,
         "to": num,
-        "from": "+19194802826",
+        "from": process.env.FROM_PHONE,
         "text": message
     };
 
